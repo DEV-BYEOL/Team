@@ -11,4 +11,43 @@
     select * from question_board where bno>0
     ]]>
   </select>
+  
+  <insert id="insert">
+  insert into question_board(bno,title,message,name,email)
+  values (seq_questionboard.nextval,#{title},#{message},#{name},#{email})
+ 
+  </insert>
+  
+  <insert id="insertSelectKey">
+  <selectKey keyProperty="bno" order="BEFORE" resultType="long">
+  select seq_questionboard.nextval from dual
+  </selectKey>
+  insert into question_board (bno,title,message,name,email)
+  values (#{bno},#{title},#{message},#{name},#{email})
+ 
+  
+  </insert>
+  
+  <select id="read" resultType="com.project.domain.QuestionVO">
+  
+  select * from Question_board where bno=#{bno}
+  </select>
+  
+    <delete id="delete">
+  
+  delete from Question_board where bno=#{bno}
+  </delete>
+  
+  <update id="update">
+  
+  update question_board
+  set title=#{title},
+  message=#{message},
+  name=#{name},
+  email=#{email}
+  where bno=#{bno}
+
+  
+  </update>
+  
   </mapper>
