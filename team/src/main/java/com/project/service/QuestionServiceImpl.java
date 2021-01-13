@@ -32,7 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public void register(QuestionVO quev) {
 		log.info("register:" + quev);
-		quem.insertSelectKey(quev);
+		quem.insert(quev);
 	}
 
 	@Override
