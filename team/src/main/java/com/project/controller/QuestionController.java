@@ -60,10 +60,9 @@ public class QuestionController {
 	public ResponseEntity<String> register(@RequestBody QuestionVO quev){
 		
 		log.info("QuestionVO: "+quev);
-		
+         qService.register(quev);
 	   
-		return new ResponseEntity<>("success",HttpStatus.OK);	
-	
+		      return new ResponseEntity<>("success",HttpStatus.OK);
 	}
 	
 
@@ -76,10 +75,9 @@ public class QuestionController {
 			                             @PathVariable("bno") Long bno){
 	quev.setBno(bno);
 	log.info("modify: "+quev );
+	qService.modify(quev);
 	
-	return qService.modify(quev)
-		   ? new ResponseEntity<>("success",HttpStatus.OK)
-		   : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)	;	
+	return new ResponseEntity<>("success",HttpStatus.OK);
 	}
 
 	@DeleteMapping(value="/list/{bno}", produces = {MediaType.APPLICATION_XML_VALUE, 
