@@ -21,34 +21,34 @@
 				<!-- /.panel-heading -->
 				<div class="panel-body">
 					<div class="form-group">
-						<label>Bno</label> <input class="form-control" name='bno'
-							value='<c:out value="${board.bno}"/>' readonly="readonly" />
+						<label>QuesNo</label> <input class="form-control" name='quesNo'
+							value='<c:out value="${board.quesNo}"/>' readonly="readonly" />
 					</div>
 					<div class="form-group">
-						<label>Title</label> <input class="form-control" name='title'
-							value='<c:out value="${board.title}"/>' readonly="readonly" />
+						<label>QuesTit</label> <input class="form-control" name='quesTit'
+							value='<c:out value="${board.quesTit}"/>' readonly="readonly" />
 					</div>
 					<div class="form-group">
-						<label>Text Area</label>
-						<textarea class="form-control" rows="3" name='content'
+						<label>QuesCon</label>
+						<textarea class="form-control" rows="3" name='quesCon'
 							readonly="readonly">
-						<c:out value="${board.content}" />
+						<c:out value="${board.quesCon}" />
 					</textarea>
 					</div>
 					<div class="form-group">
-						<label>Writer</label> <input class="form-control" name='writer'
-							value='<c:out value="${board.writer}"/>' readonly="readonly" />
+						<label>QuesWri</label> <input class="form-control" name='quesWri'
+							value='<c:out value="${board.quesWri}"/>' readonly="readonly" />
 					</div>
 
 
 					<button data-oper='modify' class="btn btn-default"
-						onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
+						onclick="location.href='/question/modify?quesNo=<c:out value="${board.quesNo}"/>'">Modify</button>
 					<button data-oper='list' class="btn btn-info"
-						onclick="location.href='/board/list'">List</button>
+						onclick="location.href='/question/list'">List</button>
 
-					<form id='operForm' action="/board/modify" method="get">
-						<input type='hidden' id='bno' name='bno'
-							value='<c:out value="${board.bno}"/>'> <input
+					<form id='operForm' action="/question/modify" method="get">
+						<input type='hidden' id='quesNo' name='quesNo'
+							value='<c:out value="${board.quesNo}"/>'> <input
 							type='hidden' name='pageNum'
 							value='<c:out value="${cri.pageNum}"/>'> <input
 							type='hidden' name='amount'
@@ -242,7 +242,7 @@
 // 	console.log("===========================");
 // 	console.log("JS Test");
 	$(document).ready(function() {
-	var bnoValue = '<c:out value="${board.bno}"/>';
+	var quesNoValue = '<c:out value="${board.quesNo}"/>';
 	var replyUL = $(".chat");
 	
 	showList(1);
@@ -251,7 +251,7 @@
 	function showList(page){
 		console.log("show list : " + page);
 		
-		replyService.getList({bno:bnoValue,page: page||1}, function(replyCnt, list) {
+		replyService.getList({quesNo:quesNoValue,page: page||1}, function(replyCnt, list) {
 			console.log("replyCnt : " + replyCnt);
 			console.log("list : " + list);
 			console.log(list);
@@ -268,8 +268,8 @@
 				return;
 			}
 			for(var i = 0, len = list.length||0; i < len; i++){
-				str += "<li class='left clearfix' data-rno='"+list[i].rno+"'>";
-				str += "<div><div class='header'><strong class='primary-font'>["+list[i].rno+"] "+list[i].replyer+"</strong>";
+				str += "<li class='left clearfix' data-replyNo='"+list[i].replyNo+"'>";
+				str += "<div><div class='header'><strong class='primary-font'>["+list[i].replyNo+"] "+list[i].replyer+"</strong>";
 				str += "<small class='pull-right text-muted'>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
 				str += "<p>"+list[i].reply+"</p></div></li>";
 			}
@@ -357,7 +357,7 @@
 		var reply = {
 				reply : modalInputReply.val(),
 				replyer : modalInputReplyer.val(),
-				bno : bnoValue
+				quesNo : quesNoValue
 		};
 	replyService.add(reply, function(result){
 		alert(result);
@@ -372,13 +372,13 @@
 	// 특정 댓글의 클릭 이벤트 처리 (425)
 	// 댓글 조회 클릭 이벤트 처리 (426)
 	$(".chat").on("click", "li", function(e){
-		var rno = $(this).data("rno");
-		replyService.get(rno, function(reply){
+		var replyNo = $(this).data("replyNo");
+		replyService.get(replyNo, function(reply){
 			modalInputReply.val(reply.reply);
 			modalInputReplyer.val(reply.replyer);
 			modalInputReplyDate.val(replyService.displayTime(reply.replyDate))
 			.attr("readonly", "readonly");
-			modal.data("rno", reply.rno);
+			modal.data("replyNo", reply.replyNo);
 			
 			modal.find("button[id != 'modalCloseBtn']").hide();
 			modalModBtn.show();
@@ -392,7 +392,7 @@
 	// 댓글 수정 삭제 이벤트 처리 (442)
 	modalModBtn.on("click", function(e){
 
-		var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+		var reply = {replyNo:modal.data("replyNo"), reply: modalInputReply.val()};
 		replyService.update(reply, function(result){
 			alert(result);
 			modal.modal("hide");
@@ -401,8 +401,8 @@
 	});
 	
 	modalRemoveBtn.on("click", function(e){
-		var rno = modal.data("rno");
-		replyService.remove(rno, function(result){
+		var replyNo = modal.data("replyNo");
+		replyService.remove(replyNo, function(result){
 			alert(result);
 			modal.modal("hide");
 			showList(pageNum);
@@ -411,37 +411,7 @@
 	
 	});
 	
-	// 삭제된 댓글은 다시 실행하면 에러가 발생하니 작업 완료되었다면 주석을 처리하자
-// 	replyService.remove(16, function(count){
-// 		console.log(count);
-// 		if(count === "success"){
-// 			alert("remove complete");
-// 		}
-// 	}, function(err){
-// 		alert('Error');
-// 	});
-	
-	// 수정된 댓글을 다시 실행하면 에러가 발생하니 주석 처리를 하자
-// 	replyService.update({
-// 		rno : 13,
-// 		bno : bnoValue,
-// 		reply : "해당 댓글은 수정되었습니다."
-// 	}, function(result){
-// 		alert("수정 완료...");
-// 	});
-	
-	// replyService 댓글 추가 테스트 - 댓글을 추가 하고 싶을 때 주석을 풀어서 실행을 시키면 된다.
-// 	replyService.add(
-// 		{reply:"JS Test", replyer:"tester", bno:bnoValue}
-// 		,		
-// 		function(result){
-// 			alert("Result : " + result);
-// 		}
-// 	);
-	 // replyService 댓글 조회 테스트
-// 	replyService.get(10, function(data){
-// 		console.log(data);
-// 	});
+
 	<!--  아래의 댓글 처리 코드 종료부분 -->
 	</script>
 <script type="text/javascript">
@@ -450,12 +420,12 @@
 			var operForm = $("#operForm");
 			
 			$("button[data-oper='modify']").on("click", function(e){
-				operForm.attr("action", "/board/modify").submit();
+				operForm.attr("action", "/question/modify").submit();
 			});
 			
 			$("button[data-oper='list']").on("click", function(e){
-				operForm.find("#bno").remove();
-				operForm.attr("action","/board/list")
+				operForm.find("#quesNo").remove();
+				operForm.attr("action","/question/list")
 				operForm.submit();
 			});
 		});
@@ -464,8 +434,8 @@
 <script>
 	$(document).ready(function(){
 		 (function(){
-			 var bno = '<c:out value="${board.bno}"/>';
-			 $.getJSON("/board/getAttachList", {bno:bno}, function(arr){
+			 var quesNo = '<c:out value="${board.quesNo}"/>';
+			 $.getJSON("/question/getAttachList", {quesNo:quesNo}, function(arr){
 				 console.log(arr);
 				 // (574~5) 게시글에 첨부되어있는 첨부파일을 보여주기 위한 코드
 				 var str = "";

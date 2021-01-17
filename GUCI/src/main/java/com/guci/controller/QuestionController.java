@@ -71,10 +71,10 @@ public class QuestionController {
 	// (570) BoardController 변경 화면 처리
 	@GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<QuestionAttachVO>> getAttachList(Long bno){
-		log.info("getAttachList" + bno);
+	public ResponseEntity<List<QuestionAttachVO>> getAttachList(Long quesNo){
+		log.info("getAttachList" + quesNo);
 		
-		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
+		return new ResponseEntity<>(service.getAttachList(quesNo), HttpStatus.OK);
 	}
 	
 	// (239)
@@ -85,9 +85,9 @@ public class QuestionController {
 	// 조회 처리 테스트 (217)
 	// criteria 추가 (316)
 	@GetMapping({"/get","modify"})
-	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") QuestionCriteria cri, Model model) {
+	public void get(@RequestParam("quesNo") Long quesNo, @ModelAttribute("cri") QuestionCriteria cri, Model model) {
 		log.info("/get or modify");
-		model.addAttribute("board", service.get(bno));
+		model.addAttribute("board", service.get(quesNo));
 	}
 	
 	// 수정 처리 테스트 (219)
@@ -114,13 +114,13 @@ public class QuestionController {
 	// Criteria의 getListLink를 사용함으로 코드를 수정(350)
 	// (581) 파일 삭제 처리를 위한 일부 코드 수정
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, QuestionCriteria cri, RedirectAttributes rttr) {
+	public String remove(@RequestParam("quesNo") Long quesNo, QuestionCriteria cri, RedirectAttributes rttr) {
 		
-		log.info("remove : " + bno);
+		log.info("remove : " + quesNo);
 		
-		List<QuestionAttachVO> attachList = service.getAttachList(bno);
+		List<QuestionAttachVO> attachList = service.getAttachList(quesNo);
 		
-		if(service.remove(bno)) {
+		if(service.remove(quesNo)) {
 			
 			// 첨부파일 삭제 코드
 			deleteFiles(attachList);

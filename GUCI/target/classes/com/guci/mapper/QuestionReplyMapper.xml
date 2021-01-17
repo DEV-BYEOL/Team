@@ -25,7 +25,7 @@
   	
   	<!--  p388 -->
   	<!--  p431 인덱스를 이용한 페이징 쿼리 -->
-  	<select id="getListWithPaging" resultType="com.guci.domain.QuesitonReplyVO">
+  	<select id="getListWithPaging" resultType="com.guci.domain.QuestionReplyVO">
   		<![CDATA[
   		select replyNo, quesNo, replyCon, replyWri, replyDate
   		from

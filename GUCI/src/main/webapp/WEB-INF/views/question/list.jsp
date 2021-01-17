@@ -29,27 +29,26 @@
 							<th>제목</th>
 							<th>작성자</th>
 							<th>작성일</th>
-							<th>수정일</th>
+						
 						</tr>
 					</thead>
 					<!-- p237 ~ 238 -->
 					<!-- p486 수정 -->
 					<c:forEach items="${list}" var="board">
 						<tr>
-							<td><c:out value="${board.bno }" /></td>
+							<td><c:out value="${board.quesNo }" /></td>
 							<!--  254 -->
  							<td>
-								<a class='move' href='<c:out value="${board.bno}"/>'>
-								<c:out value="${board.title }" />
+								<a class='move' href='<c:out value="${board.quesNo}"/>'>
+								<c:out value="${board.quesTit }" />
 								<b>[ <c:out value="${board.replyCnt}" /> ] </b>
 								</a>
 							</td> 
 										<!--  p314 -->
-							<td><c:out value="${board.writer }" /></td>
+							<td><c:out value="${board.quesWri }" /></td>
 							<td><fmt:formatDate pattern="yyyy-MM-dd"
-									value="${board.regdate}" /></td>
-							<td><fmt:formatDate pattern="yyyy-MM-dd"
-									value="${board.updatedate }" /></td>
+									value="${board.quesDate}" /></td>
+							
 						</tr>
 					</c:forEach>
 				</table>
@@ -58,7 +57,7 @@
 								<div class='row'>
 					<div class="col-lg-12">
 
-						<form id='searchForm' action="/board/list" method='get'>
+						<form id='searchForm' action="/question/list" method='get'>
 							<select name='type'>
 								<option value=""
 								<c:out value="${pageMaker.cri.type == null ?'selected':''}"/>>--</option>
@@ -108,7 +107,7 @@
 			</div>
 
 			<!--  p311 -->
-			<form id='actionForm' action="/board/list" method='get'>
+			<form id='actionForm' action="/question/list" method='get'>
 				<input type='hidden' name='pageNum' value='${pageMaker.cri.pageNum}'>
 				<input type='hidden' name='amount' value='${pageMaker.cri.amount}'>
 				<!--  P.344 -->
@@ -164,7 +163,7 @@
 			$("#myModal").modal("show");
 		}
 		$("#regBtn").on("click", function(){
-				self.location = "/board/register";
+				self.location = "/question/register";
 			});
 		var actionForm = $("#actionForm");
 		$(".paginate_button a").on("click", function(e){
@@ -176,8 +175,8 @@
 		// 315 Page
 		$(".move").on("click", function(e){
 			e.preventDefault();
-			actionForm.append("<input type='hidden' name='bno' value='"+$(this).attr("href")+"'>");
-			actionForm.attr("action", "/board/get");
+			actionForm.append("<input type='hidden' name='quesNo' value='"+$(this).attr("href")+"'>");
+			actionForm.attr("action", "/question/get");
 			actionForm.submit();
 		});
 		// 342 Page

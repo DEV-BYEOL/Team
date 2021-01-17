@@ -24,6 +24,14 @@
   	</trim>
   </sql>
    
+   <select id="category" resultType="com.guci.domain.QuestionCategoryVO">
+ select
+  level, quesCateName, quesCateCode, quesCateCodeRef
+ from question_category
+     start with cateCodeRef is null connect by prior quesCateCode = quesCateCodeRef
+</select>
+
+
    
     <select id="getlist" resultType="com.guci.domain.QuestionVO">
   <![CDATA[ select * from guci_question where quesNo > 0 ]]>
@@ -61,15 +69,14 @@
   	set quesTit= #{quesTit}, quesCon = #{quesCon}, quesWri=#{quesWri},quesCateCode=#{quesCateCode}
   	where quesNo = #{quesNo}
   </update>
-  
     <select id="getListWithPaging" resultType="com.guci.domain.QuestionVO">
   <![CDATA[ 
   select
   quesNo, quesTit, quesCon, quesWri,quesCateCode,quesDate, replycnt
   from 
-  	( select /*+INDEX_DESC(guci_queston pk_guci_question) */
+  	( select /*+INDEX_DESC(guci_question pk_guci_question) */
   	  rownum rn, quesNo, quesTit, quesCon, quesWri, quesDate,quesCateCode , replycnt
-  	  from guci_queston
+  	  from guci_question
   	  where 
   ]]>
 	<include refid="criteria"></include>
@@ -83,7 +90,7 @@
   
   <!--  p323 -->
   <select id="getTotalCount" resultType="int">
-  	select count(*) from guci_queston where
+  	select count(*) from guci_question where
   	<include refid="criteria"></include>
   	 quesNo > 0
   </select>

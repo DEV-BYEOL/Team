@@ -21,7 +21,7 @@
 
 				<!-- /.panel-heading -->
 				<div class="panel-body">
-					<form role="form" action="/board/modify" method="post">
+					<form role="form" action="/question/modify" method="post">
 					 <!--  p.319 추가 -->
 					 <!--  p.346 추가 -->
 						<input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
@@ -30,35 +30,30 @@
 						<input type='hidden' name='keyword' value='<c:out value="${cri.keyword}"/>'>
 						
 						<div class="form-group">
-							<label>Bno</label> <input class="form-control" name='bno'
-								value='<c:out value="${board.bno}"/>' readonly="readonly" />
+							<label>QuesNo</label> <input class="form-control" name='quesNo'
+								value='<c:out value="${board.quesNo}"/>' readonly="readonly" />
 						</div>
 						<div class="form-group">
-							<label>Title</label> <input class="form-control" name='title'
-								value='<c:out value="${board.title}"/>' />
+							<label>QuesTit</label> <input class="form-control" name='quesTit'
+								value='<c:out value="${board.quesTit}"/>' />
 						</div>
 						<div class="form-group">
-							<label>Text Area</label>
-							<textarea class="form-control" rows="3" name='content'>
-						<c:out value="${board.content}" />
+							<label>QuesCon</label>
+							<textarea class="form-control" rows="3" name='quesCon'>
+						<c:out value="${board.quesCon}" />
 					</textarea>
 						</div>
 						<div class="form-group">
-							<label>Writer</label> <input class="form-control" name='writer'
-								value='<c:out value="${board.writer}"/>' readonly="readonly" />
+							<label>QuesWri</label> <input class="form-control" name='quesWri'
+								value='<c:out value="${board.quesWri}"/>' readonly="readonly" />
 						</div>
 						<div class="form-group">
-							<label>RegDate</label> <input class="form-control"
-								name='regDate'
-								value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.regdate }"/>'
+							<label>QuesDate</label> <input class="form-control"
+								name='quesDate'
+								value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.quesDate }"/>'
 								readonly="readonly" />
 						</div>
-						<div class="form-group">
-							<label>Update Date</label> <input 
-								class="form-control" name='updateDate'
-								value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updatedate }"/>'
-								readonly="readonly" />
-						</div>
+					
 
 						<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
 						<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
@@ -168,11 +163,11 @@
 				console.log(operation);
 				
 				if(operation === 'remove'){
-					formObj.attr("action", "/board/remove");
+					formObj.attr("action", "/question/remove");
 				} else if(operation === 'list'){
 					// move to list
 					// p347 추가 코드 작성
-					formObj.attr("action", "/board/list").attr("method","get");
+					formObj.attr("action", "/question/list").attr("method","get");
 					var pageNumTag = $("input[name='pageNum']").clone();
 					var amountTag = $("input[name='amount']").clone();
 					var keywordTag = $("input[name='keyword']").clone();
@@ -206,8 +201,8 @@
 	<script>
 	$(document).ready(function(){
 		(function(){
-			var bno = '<c:out value="${board.bno}"/>';
-			$.getJSON("/board/getAttachList", {bno:bno}, function(arr){
+			var quesNo = '<c:out value="${board.quesNo}"/>';
+			$.getJSON("/question/getAttachList", {quesNo:quesNo}, function(arr){
 				console.log(arr);
 				var str ="";
 				$(arr).each(function(i, attach){
