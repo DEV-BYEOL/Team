@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <!-- P553  -->
+<mapper namespace="com.guci.mapper.QuestionAttachMapper">
+	<insert id="insert">
+	insert into guci_question_attach (uuid, uploadpath, filename, filetype, quesNo)
+	values (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{quesNo})
+	</insert>
+  
+  	<delete id="delete">
+  		delete from guci_question_attach where uuid = #{uuid}
+  	</delete>
+  	
+  	<select id="findByBno" resultType="com.guci.domain.QuestionAttachVO">
+  	select * from guci_question_attach quesNo = #{quesNo}
+  	</select>
+  	
+  	<!--  P579 첨부파일 삭제 -->
+  	<delete id="deleteAll">
+  		delete guci_question_attach where quesNo = #{quesNo}
+  	</delete>
+  	
+  	<!--  P600 BoardAttachMapper.xml 쿼리 추가 -->
+  	<select id="getOldFiles" resultType="com.guci.domain.QuestionAttachVO">
+  		select * from guci_question_attach where uploadpath = to_char(sysdate -1, 'yyyy/mm/dd')
+  	</select>
+</mapper>
