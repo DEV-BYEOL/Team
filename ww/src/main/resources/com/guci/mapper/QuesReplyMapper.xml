@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guci.mapper.QuesReplyMapper">
+  	<!-- p382 -->
+	<insert id="insert">
+		insert into reply (replyNo, quesNo, replyCon, replyWri)
+		values (seq_reply.nextval, #{quesNo}, #{replyCon}, #{replyWri})
+	</insert>
+  	
+  	<!-- p384 -->
+  	<select id="read" resultType="com.guci.domain.QuesReplyVO">
+  		select * from reply where replyNo = #{replyNo}
+  	</select>
+  	
+  	<!--  p386 -->
+  	<delete id="delete">
+  		delete from reply where replyNo = #{replyNo}
+  	</delete>
+  	
+  	<!--  p386 -->
+  	<update id="update">
+		update reply set reply = #{reply} where replyNo = #{replyNo}
+  	</update>
+  	
+  	<!--  p388 -->
+  	<!--  p431 인덱스를 이용한 페이징 쿼리 -->
+  	<select id="getListWithPaging" resultType="com.guci.domain.QuesReplyVO">
+  		<![CDATA[
+  		select replyNo, quesNo, replyCon, replyWri, replyDate
+  		from
+  			(select /*+INDEX(reply idx_reply) */
+  				rownum rn, replyNo, quesNo, replyCon, replyWri,replyDate
+  		 	from reply
+  			where quesNo = #{quesNo}
+  			and replyNo > 0
+  			and rownum <= #{cri.pageNum} * #{cri.amount}
+  			) where rn > (#{cri.pageNum} -1 ) * #{cri.amount}
+  		]]>
+  	</select>
+  	
+  <!--  p433 댓글 숫자 파악을 위한 getCountByquesNo를 추가한다. -->
+  <select id="getCountByquesNo" resultType="int">
+    <![CDATA[
+    	select count(replyNo) from reply where quesNo = #{quesNo}
+    ]]>
+  </select>
+  
+</mapper>
